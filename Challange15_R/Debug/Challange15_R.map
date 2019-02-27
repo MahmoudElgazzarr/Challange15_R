@@ -88,9 +88,17 @@ Discarded input sections
  .text          0x00000000        0x0 UART/UART.o
  .data          0x00000000        0x0 UART/UART.o
  .bss           0x00000000        0x0 UART/UART.o
- .debug_line    0x00000000        0x0 UART/UART.o
- .debug_str     0x00000000       0xf5 UART/UART.o
+ .text.UART_Init
+                0x00000000       0x3a UART/UART.o
+ .debug_info    0x00000000      0x26e UART/UART.o
+ .debug_abbrev  0x00000000       0x98 UART/UART.o
+ .debug_aranges
+                0x00000000       0x20 UART/UART.o
+ .debug_ranges  0x00000000       0x10 UART/UART.o
+ .debug_line    0x00000000       0xbb UART/UART.o
+ .debug_str     0x00000000      0x35a UART/UART.o
  .comment       0x00000000       0x31 UART/UART.o
+ .debug_frame   0x00000000       0x24 UART/UART.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
@@ -597,22 +605,22 @@ END GROUP
  .debug_frame   0x000001f0       0x64 Task/Task.o
  .debug_frame   0x00000254       0x8c Timer/Timer.o
 
-.debug_str      0x00000000      0x5a5
+.debug_str      0x00000000      0x5ca
  *(.debug_str)
  .debug_str     0x00000000      0x196 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega32a/avr5/crtatmega32a.o
  .debug_str     0x00000196      0x158 Buttons/Buttons.o
                                 0x17f (size before relaxing)
- .debug_str     0x000002ee       0x72 DIO/DIO.o
-                                0x1d6 (size before relaxing)
- .debug_str     0x00000360       0x4e LEDS/LEDS.o
+ .debug_str     0x000002ee       0x97 DIO/DIO.o
+                                0x1c0 (size before relaxing)
+ .debug_str     0x00000385       0x4e LEDS/LEDS.o
                                 0x194 (size before relaxing)
- .debug_str     0x000003ae       0x43 main.o
+ .debug_str     0x000003d3       0x43 main.o
                                 0x18f (size before relaxing)
- .debug_str     0x000003f1      0x11c Scheduler/Schedular.o
+ .debug_str     0x00000416      0x11c Scheduler/Schedular.o
                                 0x2a2 (size before relaxing)
- .debug_str     0x0000050d       0x2d Task/Task.o
+ .debug_str     0x00000532       0x2d Task/Task.o
                                 0x1cd (size before relaxing)
- .debug_str     0x0000053a       0x6b Timer/Timer.o
+ .debug_str     0x0000055f       0x6b Timer/Timer.o
                                 0x1eb (size before relaxing)
 
 .debug_loc      0x00000000      0x5d0
