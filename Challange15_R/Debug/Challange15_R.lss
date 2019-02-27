@@ -3,31 +3,31 @@ Challange15_R.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000100  00000000  00000000  00000074  2**1
+  0 .text         00000818  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  00000174  2**0
+  1 .data         00000000  00800060  00800060  0000088c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000006  00800060  00800060  00000174  2**0
+  2 .bss          00000075  00800060  00800060  0000088c  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000174  2**0
+  3 .comment      00000030  00000000  00000000  0000088c  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001a4  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000008bc  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000050  00000000  00000000  000001e0  2**0
+  5 .debug_aranges 00000178  00000000  00000000  000008f8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000672  00000000  00000000  00000230  2**0
+  6 .debug_info   00001041  00000000  00000000  00000a70  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000005a1  00000000  00000000  000008a2  2**0
+  7 .debug_abbrev 00000a2d  00000000  00000000  00001ab1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000026c  00000000  00000000  00000e43  2**0
+  8 .debug_line   00000996  00000000  00000000  000024de  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000b0  00000000  00000000  000010b0  2**2
+  9 .debug_frame  000002e0  00000000  00000000  00002e74  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000359  00000000  00000000  00001160  2**0
+ 10 .debug_str    000005a5  00000000  00000000  00003154  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000100  00000000  00000000  000014b9  2**0
+ 11 .debug_loc    000005d0  00000000  00000000  000036f9  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000030  00000000  00000000  000015b9  2**0
+ 12 .debug_ranges 00000108  00000000  00000000  00003cc9  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -43,7 +43,7 @@ Disassembly of section .text:
   1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
-  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__vector_10>
+  28:	0c 94 cb 03 	jmp	0x796	; 0x796 <__vector_10>
   2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
@@ -73,93 +73,1513 @@ Disassembly of section .text:
   68:	1d 92       	st	X+, r1
 
 0000006a <.do_clear_bss_start>:
-  6a:	a6 36       	cpi	r26, 0x66	; 102
+  6a:	a5 3d       	cpi	r26, 0xD5	; 213
   6c:	b2 07       	cpc	r27, r18
   6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
-  70:	0e 94 3e 00 	call	0x7c	; 0x7c <main>
-  74:	0c 94 7e 00 	jmp	0xfc	; 0xfc <_exit>
+  70:	0e 94 2d 02 	call	0x45a	; 0x45a <main>
+  74:	0c 94 0a 04 	jmp	0x814	; 0x814 <_exit>
 
 00000078 <__bad_interrupt>:
   78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-0000007c <main>:
+0000007c <get_Button1_Status>:
+#include "DIO_Definitions.h"
+#include "Buttons.h"
 
-//#include <avr/io.h>
+uint8 get_Button1_Status()
+{
+	uint8 return_value = DIO_ReadPin(Button1);
+  7c:	8a e0       	ldi	r24, 0x0A	; 10
+  7e:	0e 94 a8 01 	call	0x350	; 0x350 <DIO_ReadPin>
+	return return_value;
+  82:	08 95       	ret
 
+00000084 <DIO_WritePin>:
+#include "DIO_Definitions.h"
+#include "BitwiseOperation.h"
+
+void DIO_WritePin(uint8 PinNum,uint8 PinValue)
+{
+	if(PinNum >= 0 && PinNum < 8 )
+  84:	88 30       	cpi	r24, 0x08	; 8
+  86:	28 f5       	brcc	.+74     	; 0xd2 <DIO_WritePin+0x4e>
+	{
+			if(PinValue == 1)
+  88:	61 30       	cpi	r22, 0x01	; 1
+  8a:	81 f4       	brne	.+32     	; 0xac <DIO_WritePin+0x28>
+			{
+				Set_Bit( PORTA , PinNum);
+  8c:	9b b3       	in	r25, 0x1b	; 27
+  8e:	21 e0       	ldi	r18, 0x01	; 1
+  90:	30 e0       	ldi	r19, 0x00	; 0
+  92:	08 2e       	mov	r0, r24
+  94:	02 c0       	rjmp	.+4      	; 0x9a <DIO_WritePin+0x16>
+  96:	22 0f       	add	r18, r18
+  98:	33 1f       	adc	r19, r19
+  9a:	0a 94       	dec	r0
+  9c:	e2 f7       	brpl	.-8      	; 0x96 <DIO_WritePin+0x12>
+  9e:	29 2b       	or	r18, r25
+  a0:	2b bb       	out	0x1b, r18	; 27
+			if(PinValue == 0)
+			{
+				Clear_Bit( PORTA , PinNum);
+			}
+	}
+	if(PinNum > 7 && PinNum < 16)
+  a2:	98 ef       	ldi	r25, 0xF8	; 248
+  a4:	98 0f       	add	r25, r24
+  a6:	98 30       	cpi	r25, 0x08	; 8
+  a8:	d0 f0       	brcs	.+52     	; 0xde <DIO_WritePin+0x5a>
+  aa:	3e c0       	rjmp	.+124    	; 0x128 <DIO_WritePin+0xa4>
+	{
+			if(PinValue == 1)
+			{
+				Set_Bit( PORTA , PinNum);
+			}
+			if(PinValue == 0)
+  ac:	61 11       	cpse	r22, r1
+  ae:	8c c0       	rjmp	.+280    	; 0x1c8 <DIO_WritePin+0x144>
+			{
+				Clear_Bit( PORTA , PinNum);
+  b0:	9b b3       	in	r25, 0x1b	; 27
+  b2:	21 e0       	ldi	r18, 0x01	; 1
+  b4:	30 e0       	ldi	r19, 0x00	; 0
+  b6:	08 2e       	mov	r0, r24
+  b8:	02 c0       	rjmp	.+4      	; 0xbe <DIO_WritePin+0x3a>
+  ba:	22 0f       	add	r18, r18
+  bc:	33 1f       	adc	r19, r19
+  be:	0a 94       	dec	r0
+  c0:	e2 f7       	brpl	.-8      	; 0xba <DIO_WritePin+0x36>
+  c2:	20 95       	com	r18
+  c4:	29 23       	and	r18, r25
+  c6:	2b bb       	out	0x1b, r18	; 27
+			}
+	}
+	if(PinNum > 7 && PinNum < 16)
+  c8:	98 ef       	ldi	r25, 0xF8	; 248
+  ca:	98 0f       	add	r25, r24
+  cc:	98 30       	cpi	r25, 0x08	; 8
+  ce:	d0 f0       	brcs	.+52     	; 0x104 <DIO_WritePin+0x80>
+  d0:	81 c0       	rjmp	.+258    	; 0x1d4 <DIO_WritePin+0x150>
+  d2:	98 ef       	ldi	r25, 0xF8	; 248
+  d4:	98 0f       	add	r25, r24
+  d6:	98 30       	cpi	r25, 0x08	; 8
+  d8:	38 f5       	brcc	.+78     	; 0x128 <DIO_WritePin+0xa4>
+	{
+		if(PinValue == 1)
+  da:	61 30       	cpi	r22, 0x01	; 1
+  dc:	89 f4       	brne	.+34     	; 0x100 <DIO_WritePin+0x7c>
+		{
+			Set_Bit( PORTB , (PinNum-8));
+  de:	48 b3       	in	r20, 0x18	; 24
+  e0:	21 e0       	ldi	r18, 0x01	; 1
+  e2:	30 e0       	ldi	r19, 0x00	; 0
+  e4:	98 ef       	ldi	r25, 0xF8	; 248
+  e6:	98 0f       	add	r25, r24
+  e8:	02 c0       	rjmp	.+4      	; 0xee <DIO_WritePin+0x6a>
+  ea:	22 0f       	add	r18, r18
+  ec:	33 1f       	adc	r19, r19
+  ee:	9a 95       	dec	r25
+  f0:	e2 f7       	brpl	.-8      	; 0xea <DIO_WritePin+0x66>
+  f2:	24 2b       	or	r18, r20
+  f4:	28 bb       	out	0x18, r18	; 24
+		if(PinValue == 0)
+		{
+			Clear_Bit( PORTB , (PinNum-8));
+		}
+	}
+	if(PinNum > 15 && PinNum < 24)
+  f6:	90 ef       	ldi	r25, 0xF0	; 240
+  f8:	98 0f       	add	r25, r24
+  fa:	98 30       	cpi	r25, 0x08	; 8
+  fc:	d8 f0       	brcs	.+54     	; 0x134 <DIO_WritePin+0xb0>
+  fe:	3f c0       	rjmp	.+126    	; 0x17e <DIO_WritePin+0xfa>
+	{
+		if(PinValue == 1)
+		{
+			Set_Bit( PORTB , (PinNum-8));
+		}
+		if(PinValue == 0)
+ 100:	61 11       	cpse	r22, r1
+ 102:	12 c0       	rjmp	.+36     	; 0x128 <DIO_WritePin+0xa4>
+		{
+			Clear_Bit( PORTB , (PinNum-8));
+ 104:	98 b3       	in	r25, 0x18	; 24
+ 106:	21 e0       	ldi	r18, 0x01	; 1
+ 108:	30 e0       	ldi	r19, 0x00	; 0
+ 10a:	48 ef       	ldi	r20, 0xF8	; 248
+ 10c:	48 0f       	add	r20, r24
+ 10e:	02 c0       	rjmp	.+4      	; 0x114 <DIO_WritePin+0x90>
+ 110:	22 0f       	add	r18, r18
+ 112:	33 1f       	adc	r19, r19
+ 114:	4a 95       	dec	r20
+ 116:	e2 f7       	brpl	.-8      	; 0x110 <DIO_WritePin+0x8c>
+ 118:	20 95       	com	r18
+ 11a:	29 23       	and	r18, r25
+ 11c:	28 bb       	out	0x18, r18	; 24
+		}
+	}
+	if(PinNum > 15 && PinNum < 24)
+ 11e:	90 ef       	ldi	r25, 0xF0	; 240
+ 120:	98 0f       	add	r25, r24
+ 122:	98 30       	cpi	r25, 0x08	; 8
+ 124:	d0 f0       	brcs	.+52     	; 0x15a <DIO_WritePin+0xd6>
+ 126:	5c c0       	rjmp	.+184    	; 0x1e0 <DIO_WritePin+0x15c>
+ 128:	90 ef       	ldi	r25, 0xF0	; 240
+ 12a:	98 0f       	add	r25, r24
+ 12c:	98 30       	cpi	r25, 0x08	; 8
+ 12e:	38 f5       	brcc	.+78     	; 0x17e <DIO_WritePin+0xfa>
+	{
+		if(PinValue == 1)
+ 130:	61 30       	cpi	r22, 0x01	; 1
+ 132:	89 f4       	brne	.+34     	; 0x156 <DIO_WritePin+0xd2>
+		{
+			Set_Bit( PORTC , (PinNum-16));
+ 134:	45 b3       	in	r20, 0x15	; 21
+ 136:	21 e0       	ldi	r18, 0x01	; 1
+ 138:	30 e0       	ldi	r19, 0x00	; 0
+ 13a:	90 ef       	ldi	r25, 0xF0	; 240
+ 13c:	98 0f       	add	r25, r24
+ 13e:	02 c0       	rjmp	.+4      	; 0x144 <DIO_WritePin+0xc0>
+ 140:	22 0f       	add	r18, r18
+ 142:	33 1f       	adc	r19, r19
+ 144:	9a 95       	dec	r25
+ 146:	e2 f7       	brpl	.-8      	; 0x140 <DIO_WritePin+0xbc>
+ 148:	24 2b       	or	r18, r20
+ 14a:	25 bb       	out	0x15, r18	; 21
+		{
+			Clear_Bit( PORTC , (PinNum-16));
+		}
+	}
+	
+	if(PinNum > 24 && PinNum < 32)
+ 14c:	97 ee       	ldi	r25, 0xE7	; 231
+ 14e:	98 0f       	add	r25, r24
+ 150:	97 30       	cpi	r25, 0x07	; 7
+ 152:	d8 f0       	brcs	.+54     	; 0x18a <DIO_WritePin+0x106>
+ 154:	08 95       	ret
+	{
+		if(PinValue == 1)
+		{
+			Set_Bit( PORTC , (PinNum-16));
+		}
+		if(PinValue == 0)
+ 156:	61 11       	cpse	r22, r1
+ 158:	12 c0       	rjmp	.+36     	; 0x17e <DIO_WritePin+0xfa>
+		{
+			Clear_Bit( PORTC , (PinNum-16));
+ 15a:	95 b3       	in	r25, 0x15	; 21
+ 15c:	21 e0       	ldi	r18, 0x01	; 1
+ 15e:	30 e0       	ldi	r19, 0x00	; 0
+ 160:	40 ef       	ldi	r20, 0xF0	; 240
+ 162:	48 0f       	add	r20, r24
+ 164:	02 c0       	rjmp	.+4      	; 0x16a <DIO_WritePin+0xe6>
+ 166:	22 0f       	add	r18, r18
+ 168:	33 1f       	adc	r19, r19
+ 16a:	4a 95       	dec	r20
+ 16c:	e2 f7       	brpl	.-8      	; 0x166 <DIO_WritePin+0xe2>
+ 16e:	20 95       	com	r18
+ 170:	29 23       	and	r18, r25
+ 172:	25 bb       	out	0x15, r18	; 21
+		}
+	}
+	
+	if(PinNum > 24 && PinNum < 32)
+ 174:	97 ee       	ldi	r25, 0xE7	; 231
+ 176:	98 0f       	add	r25, r24
+ 178:	97 30       	cpi	r25, 0x07	; 7
+ 17a:	b8 f0       	brcs	.+46     	; 0x1aa <DIO_WritePin+0x126>
+ 17c:	08 95       	ret
+ 17e:	97 ee       	ldi	r25, 0xE7	; 231
+ 180:	98 0f       	add	r25, r24
+ 182:	97 30       	cpi	r25, 0x07	; 7
+ 184:	88 f5       	brcc	.+98     	; 0x1e8 <DIO_WritePin+0x164>
+	{
+			if(PinValue == 1)
+ 186:	61 30       	cpi	r22, 0x01	; 1
+ 188:	71 f4       	brne	.+28     	; 0x1a6 <DIO_WritePin+0x122>
+			{
+				Set_Bit( PORTD , (PinNum-24));
+ 18a:	42 b3       	in	r20, 0x12	; 18
+ 18c:	88 51       	subi	r24, 0x18	; 24
+ 18e:	21 e0       	ldi	r18, 0x01	; 1
+ 190:	30 e0       	ldi	r19, 0x00	; 0
+ 192:	b9 01       	movw	r22, r18
+ 194:	02 c0       	rjmp	.+4      	; 0x19a <DIO_WritePin+0x116>
+ 196:	66 0f       	add	r22, r22
+ 198:	77 1f       	adc	r23, r23
+ 19a:	8a 95       	dec	r24
+ 19c:	e2 f7       	brpl	.-8      	; 0x196 <DIO_WritePin+0x112>
+ 19e:	cb 01       	movw	r24, r22
+ 1a0:	84 2b       	or	r24, r20
+ 1a2:	82 bb       	out	0x12, r24	; 18
+ 1a4:	08 95       	ret
+			}
+			if(PinValue == 0)
+ 1a6:	61 11       	cpse	r22, r1
+ 1a8:	1f c0       	rjmp	.+62     	; 0x1e8 <DIO_WritePin+0x164>
+			{
+				Clear_Bit( PORTD , (PinNum-24));
+ 1aa:	42 b3       	in	r20, 0x12	; 18
+ 1ac:	88 51       	subi	r24, 0x18	; 24
+ 1ae:	21 e0       	ldi	r18, 0x01	; 1
+ 1b0:	30 e0       	ldi	r19, 0x00	; 0
+ 1b2:	b9 01       	movw	r22, r18
+ 1b4:	02 c0       	rjmp	.+4      	; 0x1ba <DIO_WritePin+0x136>
+ 1b6:	66 0f       	add	r22, r22
+ 1b8:	77 1f       	adc	r23, r23
+ 1ba:	8a 95       	dec	r24
+ 1bc:	e2 f7       	brpl	.-8      	; 0x1b6 <DIO_WritePin+0x132>
+ 1be:	cb 01       	movw	r24, r22
+ 1c0:	80 95       	com	r24
+ 1c2:	84 23       	and	r24, r20
+ 1c4:	82 bb       	out	0x12, r24	; 18
+			}
+	}
+}
+ 1c6:	08 95       	ret
+			if(PinValue == 0)
+			{
+				Clear_Bit( PORTA , PinNum);
+			}
+	}
+	if(PinNum > 7 && PinNum < 16)
+ 1c8:	98 ef       	ldi	r25, 0xF8	; 248
+ 1ca:	98 0f       	add	r25, r24
+ 1cc:	98 30       	cpi	r25, 0x08	; 8
+ 1ce:	08 f4       	brcc	.+2      	; 0x1d2 <DIO_WritePin+0x14e>
+ 1d0:	97 cf       	rjmp	.-210    	; 0x100 <DIO_WritePin+0x7c>
+ 1d2:	aa cf       	rjmp	.-172    	; 0x128 <DIO_WritePin+0xa4>
+		if(PinValue == 0)
+		{
+			Clear_Bit( PORTB , (PinNum-8));
+		}
+	}
+	if(PinNum > 15 && PinNum < 24)
+ 1d4:	90 ef       	ldi	r25, 0xF0	; 240
+ 1d6:	98 0f       	add	r25, r24
+ 1d8:	98 30       	cpi	r25, 0x08	; 8
+ 1da:	08 f4       	brcc	.+2      	; 0x1de <DIO_WritePin+0x15a>
+ 1dc:	bc cf       	rjmp	.-136    	; 0x156 <DIO_WritePin+0xd2>
+ 1de:	cf cf       	rjmp	.-98     	; 0x17e <DIO_WritePin+0xfa>
+		{
+			Clear_Bit( PORTC , (PinNum-16));
+		}
+	}
+	
+	if(PinNum > 24 && PinNum < 32)
+ 1e0:	97 ee       	ldi	r25, 0xE7	; 231
+ 1e2:	98 0f       	add	r25, r24
+ 1e4:	97 30       	cpi	r25, 0x07	; 7
+ 1e6:	f8 f2       	brcs	.-66     	; 0x1a6 <DIO_WritePin+0x122>
+ 1e8:	08 95       	ret
+
+000001ea <DIO_SetPinDirection>:
+pindirection = 1 output
+pindirection = 0 input
+*/
+void DIO_SetPinDirection(uint8 PinNum,uint8 PinDirection)
+{
+		if(PinNum >= 0 && PinNum < 8 )
+ 1ea:	88 30       	cpi	r24, 0x08	; 8
+ 1ec:	28 f5       	brcc	.+74     	; 0x238 <DIO_SetPinDirection+0x4e>
+		{
+			if(PinDirection== 1)
+ 1ee:	61 30       	cpi	r22, 0x01	; 1
+ 1f0:	81 f4       	brne	.+32     	; 0x212 <DIO_SetPinDirection+0x28>
+			{
+				Set_Bit( DDRA , PinNum);
+ 1f2:	9a b3       	in	r25, 0x1a	; 26
+ 1f4:	21 e0       	ldi	r18, 0x01	; 1
+ 1f6:	30 e0       	ldi	r19, 0x00	; 0
+ 1f8:	08 2e       	mov	r0, r24
+ 1fa:	02 c0       	rjmp	.+4      	; 0x200 <DIO_SetPinDirection+0x16>
+ 1fc:	22 0f       	add	r18, r18
+ 1fe:	33 1f       	adc	r19, r19
+ 200:	0a 94       	dec	r0
+ 202:	e2 f7       	brpl	.-8      	; 0x1fc <DIO_SetPinDirection+0x12>
+ 204:	29 2b       	or	r18, r25
+ 206:	2a bb       	out	0x1a, r18	; 26
+			if(PinDirection== 0)
+			{
+				Clear_Bit( DDRA , PinNum);
+			}
+		}
+		if(PinNum > 7 && PinNum < 16)
+ 208:	98 ef       	ldi	r25, 0xF8	; 248
+ 20a:	98 0f       	add	r25, r24
+ 20c:	98 30       	cpi	r25, 0x08	; 8
+ 20e:	d0 f0       	brcs	.+52     	; 0x244 <DIO_SetPinDirection+0x5a>
+ 210:	3e c0       	rjmp	.+124    	; 0x28e <DIO_SetPinDirection+0xa4>
+		{
+			if(PinDirection== 1)
+			{
+				Set_Bit( DDRA , PinNum);
+			}
+			if(PinDirection== 0)
+ 212:	61 11       	cpse	r22, r1
+ 214:	8c c0       	rjmp	.+280    	; 0x32e <DIO_SetPinDirection+0x144>
+			{
+				Clear_Bit( DDRA , PinNum);
+ 216:	9a b3       	in	r25, 0x1a	; 26
+ 218:	21 e0       	ldi	r18, 0x01	; 1
+ 21a:	30 e0       	ldi	r19, 0x00	; 0
+ 21c:	08 2e       	mov	r0, r24
+ 21e:	02 c0       	rjmp	.+4      	; 0x224 <DIO_SetPinDirection+0x3a>
+ 220:	22 0f       	add	r18, r18
+ 222:	33 1f       	adc	r19, r19
+ 224:	0a 94       	dec	r0
+ 226:	e2 f7       	brpl	.-8      	; 0x220 <DIO_SetPinDirection+0x36>
+ 228:	20 95       	com	r18
+ 22a:	29 23       	and	r18, r25
+ 22c:	2a bb       	out	0x1a, r18	; 26
+			}
+		}
+		if(PinNum > 7 && PinNum < 16)
+ 22e:	98 ef       	ldi	r25, 0xF8	; 248
+ 230:	98 0f       	add	r25, r24
+ 232:	98 30       	cpi	r25, 0x08	; 8
+ 234:	d0 f0       	brcs	.+52     	; 0x26a <DIO_SetPinDirection+0x80>
+ 236:	81 c0       	rjmp	.+258    	; 0x33a <DIO_SetPinDirection+0x150>
+ 238:	98 ef       	ldi	r25, 0xF8	; 248
+ 23a:	98 0f       	add	r25, r24
+ 23c:	98 30       	cpi	r25, 0x08	; 8
+ 23e:	38 f5       	brcc	.+78     	; 0x28e <DIO_SetPinDirection+0xa4>
+		{
+			if(PinDirection== 1)
+ 240:	61 30       	cpi	r22, 0x01	; 1
+ 242:	89 f4       	brne	.+34     	; 0x266 <DIO_SetPinDirection+0x7c>
+			{
+				Set_Bit( DDRB , (PinNum-8));
+ 244:	47 b3       	in	r20, 0x17	; 23
+ 246:	21 e0       	ldi	r18, 0x01	; 1
+ 248:	30 e0       	ldi	r19, 0x00	; 0
+ 24a:	98 ef       	ldi	r25, 0xF8	; 248
+ 24c:	98 0f       	add	r25, r24
+ 24e:	02 c0       	rjmp	.+4      	; 0x254 <DIO_SetPinDirection+0x6a>
+ 250:	22 0f       	add	r18, r18
+ 252:	33 1f       	adc	r19, r19
+ 254:	9a 95       	dec	r25
+ 256:	e2 f7       	brpl	.-8      	; 0x250 <DIO_SetPinDirection+0x66>
+ 258:	24 2b       	or	r18, r20
+ 25a:	27 bb       	out	0x17, r18	; 23
+			if(PinDirection== 0)
+			{
+				Clear_Bit( DDRB , (PinNum-8));
+			}
+		}
+		if(PinNum > 15 && PinNum < 24)
+ 25c:	90 ef       	ldi	r25, 0xF0	; 240
+ 25e:	98 0f       	add	r25, r24
+ 260:	98 30       	cpi	r25, 0x08	; 8
+ 262:	d8 f0       	brcs	.+54     	; 0x29a <DIO_SetPinDirection+0xb0>
+ 264:	3f c0       	rjmp	.+126    	; 0x2e4 <DIO_SetPinDirection+0xfa>
+		{
+			if(PinDirection== 1)
+			{
+				Set_Bit( DDRB , (PinNum-8));
+			}
+			if(PinDirection== 0)
+ 266:	61 11       	cpse	r22, r1
+ 268:	12 c0       	rjmp	.+36     	; 0x28e <DIO_SetPinDirection+0xa4>
+			{
+				Clear_Bit( DDRB , (PinNum-8));
+ 26a:	97 b3       	in	r25, 0x17	; 23
+ 26c:	21 e0       	ldi	r18, 0x01	; 1
+ 26e:	30 e0       	ldi	r19, 0x00	; 0
+ 270:	48 ef       	ldi	r20, 0xF8	; 248
+ 272:	48 0f       	add	r20, r24
+ 274:	02 c0       	rjmp	.+4      	; 0x27a <DIO_SetPinDirection+0x90>
+ 276:	22 0f       	add	r18, r18
+ 278:	33 1f       	adc	r19, r19
+ 27a:	4a 95       	dec	r20
+ 27c:	e2 f7       	brpl	.-8      	; 0x276 <DIO_SetPinDirection+0x8c>
+ 27e:	20 95       	com	r18
+ 280:	29 23       	and	r18, r25
+ 282:	27 bb       	out	0x17, r18	; 23
+			}
+		}
+		if(PinNum > 15 && PinNum < 24)
+ 284:	90 ef       	ldi	r25, 0xF0	; 240
+ 286:	98 0f       	add	r25, r24
+ 288:	98 30       	cpi	r25, 0x08	; 8
+ 28a:	d0 f0       	brcs	.+52     	; 0x2c0 <DIO_SetPinDirection+0xd6>
+ 28c:	5c c0       	rjmp	.+184    	; 0x346 <DIO_SetPinDirection+0x15c>
+ 28e:	90 ef       	ldi	r25, 0xF0	; 240
+ 290:	98 0f       	add	r25, r24
+ 292:	98 30       	cpi	r25, 0x08	; 8
+ 294:	38 f5       	brcc	.+78     	; 0x2e4 <DIO_SetPinDirection+0xfa>
+		{
+			if(PinDirection== 1)
+ 296:	61 30       	cpi	r22, 0x01	; 1
+ 298:	89 f4       	brne	.+34     	; 0x2bc <DIO_SetPinDirection+0xd2>
+			{
+				Set_Bit( DDRC , (PinNum-16));
+ 29a:	44 b3       	in	r20, 0x14	; 20
+ 29c:	21 e0       	ldi	r18, 0x01	; 1
+ 29e:	30 e0       	ldi	r19, 0x00	; 0
+ 2a0:	90 ef       	ldi	r25, 0xF0	; 240
+ 2a2:	98 0f       	add	r25, r24
+ 2a4:	02 c0       	rjmp	.+4      	; 0x2aa <DIO_SetPinDirection+0xc0>
+ 2a6:	22 0f       	add	r18, r18
+ 2a8:	33 1f       	adc	r19, r19
+ 2aa:	9a 95       	dec	r25
+ 2ac:	e2 f7       	brpl	.-8      	; 0x2a6 <DIO_SetPinDirection+0xbc>
+ 2ae:	24 2b       	or	r18, r20
+ 2b0:	24 bb       	out	0x14, r18	; 20
+			{
+				Clear_Bit( DDRC , (PinNum-16));
+			}
+		}
+		
+		if(PinNum > 24 && PinNum < 32)
+ 2b2:	97 ee       	ldi	r25, 0xE7	; 231
+ 2b4:	98 0f       	add	r25, r24
+ 2b6:	97 30       	cpi	r25, 0x07	; 7
+ 2b8:	d8 f0       	brcs	.+54     	; 0x2f0 <DIO_SetPinDirection+0x106>
+ 2ba:	08 95       	ret
+		{
+			if(PinDirection== 1)
+			{
+				Set_Bit( DDRC , (PinNum-16));
+			}
+			if(PinDirection== 0)
+ 2bc:	61 11       	cpse	r22, r1
+ 2be:	12 c0       	rjmp	.+36     	; 0x2e4 <DIO_SetPinDirection+0xfa>
+			{
+				Clear_Bit( DDRC , (PinNum-16));
+ 2c0:	94 b3       	in	r25, 0x14	; 20
+ 2c2:	21 e0       	ldi	r18, 0x01	; 1
+ 2c4:	30 e0       	ldi	r19, 0x00	; 0
+ 2c6:	40 ef       	ldi	r20, 0xF0	; 240
+ 2c8:	48 0f       	add	r20, r24
+ 2ca:	02 c0       	rjmp	.+4      	; 0x2d0 <DIO_SetPinDirection+0xe6>
+ 2cc:	22 0f       	add	r18, r18
+ 2ce:	33 1f       	adc	r19, r19
+ 2d0:	4a 95       	dec	r20
+ 2d2:	e2 f7       	brpl	.-8      	; 0x2cc <DIO_SetPinDirection+0xe2>
+ 2d4:	20 95       	com	r18
+ 2d6:	29 23       	and	r18, r25
+ 2d8:	24 bb       	out	0x14, r18	; 20
+			}
+		}
+		
+		if(PinNum > 24 && PinNum < 32)
+ 2da:	97 ee       	ldi	r25, 0xE7	; 231
+ 2dc:	98 0f       	add	r25, r24
+ 2de:	97 30       	cpi	r25, 0x07	; 7
+ 2e0:	b8 f0       	brcs	.+46     	; 0x310 <DIO_SetPinDirection+0x126>
+ 2e2:	08 95       	ret
+ 2e4:	97 ee       	ldi	r25, 0xE7	; 231
+ 2e6:	98 0f       	add	r25, r24
+ 2e8:	97 30       	cpi	r25, 0x07	; 7
+ 2ea:	88 f5       	brcc	.+98     	; 0x34e <DIO_SetPinDirection+0x164>
+		{
+			if(PinDirection== 1)
+ 2ec:	61 30       	cpi	r22, 0x01	; 1
+ 2ee:	71 f4       	brne	.+28     	; 0x30c <DIO_SetPinDirection+0x122>
+			{
+				Set_Bit( DDRD , (PinNum-24));
+ 2f0:	41 b3       	in	r20, 0x11	; 17
+ 2f2:	88 51       	subi	r24, 0x18	; 24
+ 2f4:	21 e0       	ldi	r18, 0x01	; 1
+ 2f6:	30 e0       	ldi	r19, 0x00	; 0
+ 2f8:	b9 01       	movw	r22, r18
+ 2fa:	02 c0       	rjmp	.+4      	; 0x300 <DIO_SetPinDirection+0x116>
+ 2fc:	66 0f       	add	r22, r22
+ 2fe:	77 1f       	adc	r23, r23
+ 300:	8a 95       	dec	r24
+ 302:	e2 f7       	brpl	.-8      	; 0x2fc <DIO_SetPinDirection+0x112>
+ 304:	cb 01       	movw	r24, r22
+ 306:	84 2b       	or	r24, r20
+ 308:	81 bb       	out	0x11, r24	; 17
+ 30a:	08 95       	ret
+			}
+			if(PinDirection== 0)
+ 30c:	61 11       	cpse	r22, r1
+ 30e:	1f c0       	rjmp	.+62     	; 0x34e <DIO_SetPinDirection+0x164>
+			{
+				Clear_Bit( DDRD , (PinNum-24));
+ 310:	41 b3       	in	r20, 0x11	; 17
+ 312:	88 51       	subi	r24, 0x18	; 24
+ 314:	21 e0       	ldi	r18, 0x01	; 1
+ 316:	30 e0       	ldi	r19, 0x00	; 0
+ 318:	b9 01       	movw	r22, r18
+ 31a:	02 c0       	rjmp	.+4      	; 0x320 <DIO_SetPinDirection+0x136>
+ 31c:	66 0f       	add	r22, r22
+ 31e:	77 1f       	adc	r23, r23
+ 320:	8a 95       	dec	r24
+ 322:	e2 f7       	brpl	.-8      	; 0x31c <DIO_SetPinDirection+0x132>
+ 324:	cb 01       	movw	r24, r22
+ 326:	80 95       	com	r24
+ 328:	84 23       	and	r24, r20
+ 32a:	81 bb       	out	0x11, r24	; 17
+			}
+		}
+}
+ 32c:	08 95       	ret
+			if(PinDirection== 0)
+			{
+				Clear_Bit( DDRA , PinNum);
+			}
+		}
+		if(PinNum > 7 && PinNum < 16)
+ 32e:	98 ef       	ldi	r25, 0xF8	; 248
+ 330:	98 0f       	add	r25, r24
+ 332:	98 30       	cpi	r25, 0x08	; 8
+ 334:	08 f4       	brcc	.+2      	; 0x338 <DIO_SetPinDirection+0x14e>
+ 336:	97 cf       	rjmp	.-210    	; 0x266 <DIO_SetPinDirection+0x7c>
+ 338:	aa cf       	rjmp	.-172    	; 0x28e <DIO_SetPinDirection+0xa4>
+			if(PinDirection== 0)
+			{
+				Clear_Bit( DDRB , (PinNum-8));
+			}
+		}
+		if(PinNum > 15 && PinNum < 24)
+ 33a:	90 ef       	ldi	r25, 0xF0	; 240
+ 33c:	98 0f       	add	r25, r24
+ 33e:	98 30       	cpi	r25, 0x08	; 8
+ 340:	08 f4       	brcc	.+2      	; 0x344 <DIO_SetPinDirection+0x15a>
+ 342:	bc cf       	rjmp	.-136    	; 0x2bc <DIO_SetPinDirection+0xd2>
+ 344:	cf cf       	rjmp	.-98     	; 0x2e4 <DIO_SetPinDirection+0xfa>
+			{
+				Clear_Bit( DDRC , (PinNum-16));
+			}
+		}
+		
+		if(PinNum > 24 && PinNum < 32)
+ 346:	97 ee       	ldi	r25, 0xE7	; 231
+ 348:	98 0f       	add	r25, r24
+ 34a:	97 30       	cpi	r25, 0x07	; 7
+ 34c:	f8 f2       	brcs	.-66     	; 0x30c <DIO_SetPinDirection+0x122>
+ 34e:	08 95       	ret
+
+00000350 <DIO_ReadPin>:
+		}
+}
+uint8 DIO_ReadPin(uint8 PinNum)
+{
+		uint8 return_value=0;
+		if(PinNum >= 0 && PinNum < 8 )
+ 350:	88 30       	cpi	r24, 0x08	; 8
+ 352:	98 f4       	brcc	.+38     	; 0x37a <DIO_ReadPin+0x2a>
+		{
+			return_value = Get_Bit(PINA , PinNum);
+ 354:	49 b3       	in	r20, 0x19	; 25
+ 356:	21 e0       	ldi	r18, 0x01	; 1
+ 358:	30 e0       	ldi	r19, 0x00	; 0
+ 35a:	08 2e       	mov	r0, r24
+ 35c:	02 c0       	rjmp	.+4      	; 0x362 <DIO_ReadPin+0x12>
+ 35e:	22 0f       	add	r18, r18
+ 360:	33 1f       	adc	r19, r19
+ 362:	0a 94       	dec	r0
+ 364:	e2 f7       	brpl	.-8      	; 0x35e <DIO_ReadPin+0xe>
+ 366:	50 e0       	ldi	r21, 0x00	; 0
+ 368:	24 23       	and	r18, r20
+ 36a:	35 23       	and	r19, r21
+ 36c:	08 2e       	mov	r0, r24
+ 36e:	02 c0       	rjmp	.+4      	; 0x374 <DIO_ReadPin+0x24>
+ 370:	35 95       	asr	r19
+ 372:	27 95       	ror	r18
+ 374:	0a 94       	dec	r0
+ 376:	e2 f7       	brpl	.-8      	; 0x370 <DIO_ReadPin+0x20>
+ 378:	01 c0       	rjmp	.+2      	; 0x37c <DIO_ReadPin+0x2c>
+			}
+		}
+}
+uint8 DIO_ReadPin(uint8 PinNum)
+{
+		uint8 return_value=0;
+ 37a:	20 e0       	ldi	r18, 0x00	; 0
+		if(PinNum >= 0 && PinNum < 8 )
+		{
+			return_value = Get_Bit(PINA , PinNum);
+		}
+		if(PinNum > 7 && PinNum < 16)
+ 37c:	98 ef       	ldi	r25, 0xF8	; 248
+ 37e:	98 0f       	add	r25, r24
+ 380:	98 30       	cpi	r25, 0x08	; 8
+ 382:	a8 f4       	brcc	.+42     	; 0x3ae <DIO_ReadPin+0x5e>
+		{
+			return_value = Get_Bit(PINB , (PinNum-8));
+ 384:	46 b3       	in	r20, 0x16	; 22
+ 386:	68 2f       	mov	r22, r24
+ 388:	70 e0       	ldi	r23, 0x00	; 0
+ 38a:	68 50       	subi	r22, 0x08	; 8
+ 38c:	71 09       	sbc	r23, r1
+ 38e:	21 e0       	ldi	r18, 0x01	; 1
+ 390:	30 e0       	ldi	r19, 0x00	; 0
+ 392:	06 2e       	mov	r0, r22
+ 394:	02 c0       	rjmp	.+4      	; 0x39a <DIO_ReadPin+0x4a>
+ 396:	22 0f       	add	r18, r18
+ 398:	33 1f       	adc	r19, r19
+ 39a:	0a 94       	dec	r0
+ 39c:	e2 f7       	brpl	.-8      	; 0x396 <DIO_ReadPin+0x46>
+ 39e:	50 e0       	ldi	r21, 0x00	; 0
+ 3a0:	24 23       	and	r18, r20
+ 3a2:	35 23       	and	r19, r21
+ 3a4:	02 c0       	rjmp	.+4      	; 0x3aa <DIO_ReadPin+0x5a>
+ 3a6:	35 95       	asr	r19
+ 3a8:	27 95       	ror	r18
+ 3aa:	6a 95       	dec	r22
+ 3ac:	e2 f7       	brpl	.-8      	; 0x3a6 <DIO_ReadPin+0x56>
+		}
+		if(PinNum > 15 && PinNum < 24)
+ 3ae:	90 ef       	ldi	r25, 0xF0	; 240
+ 3b0:	98 0f       	add	r25, r24
+ 3b2:	98 30       	cpi	r25, 0x08	; 8
+ 3b4:	a8 f4       	brcc	.+42     	; 0x3e0 <DIO_ReadPin+0x90>
+		{
+			return_value = Get_Bit(PINC , (PinNum-16));
+ 3b6:	43 b3       	in	r20, 0x13	; 19
+ 3b8:	68 2f       	mov	r22, r24
+ 3ba:	70 e0       	ldi	r23, 0x00	; 0
+ 3bc:	60 51       	subi	r22, 0x10	; 16
+ 3be:	71 09       	sbc	r23, r1
+ 3c0:	21 e0       	ldi	r18, 0x01	; 1
+ 3c2:	30 e0       	ldi	r19, 0x00	; 0
+ 3c4:	06 2e       	mov	r0, r22
+ 3c6:	02 c0       	rjmp	.+4      	; 0x3cc <DIO_ReadPin+0x7c>
+ 3c8:	22 0f       	add	r18, r18
+ 3ca:	33 1f       	adc	r19, r19
+ 3cc:	0a 94       	dec	r0
+ 3ce:	e2 f7       	brpl	.-8      	; 0x3c8 <DIO_ReadPin+0x78>
+ 3d0:	50 e0       	ldi	r21, 0x00	; 0
+ 3d2:	24 23       	and	r18, r20
+ 3d4:	35 23       	and	r19, r21
+ 3d6:	02 c0       	rjmp	.+4      	; 0x3dc <DIO_ReadPin+0x8c>
+ 3d8:	35 95       	asr	r19
+ 3da:	27 95       	ror	r18
+ 3dc:	6a 95       	dec	r22
+ 3de:	e2 f7       	brpl	.-8      	; 0x3d8 <DIO_ReadPin+0x88>
+		}
+		
+		if(PinNum > 24 && PinNum < 32)
+ 3e0:	97 ee       	ldi	r25, 0xE7	; 231
+ 3e2:	98 0f       	add	r25, r24
+ 3e4:	97 30       	cpi	r25, 0x07	; 7
+ 3e6:	b0 f4       	brcc	.+44     	; 0x414 <__LOCK_REGION_LENGTH__+0x14>
+		{
+			return_value = Get_Bit(PIND , (PinNum-24));
+ 3e8:	20 b3       	in	r18, 0x10	; 16
+ 3ea:	48 2f       	mov	r20, r24
+ 3ec:	50 e0       	ldi	r21, 0x00	; 0
+ 3ee:	48 51       	subi	r20, 0x18	; 24
+ 3f0:	51 09       	sbc	r21, r1
+ 3f2:	81 e0       	ldi	r24, 0x01	; 1
+ 3f4:	90 e0       	ldi	r25, 0x00	; 0
+ 3f6:	04 2e       	mov	r0, r20
+ 3f8:	02 c0       	rjmp	.+4      	; 0x3fe <DIO_ReadPin+0xae>
+ 3fa:	88 0f       	add	r24, r24
+ 3fc:	99 1f       	adc	r25, r25
+ 3fe:	0a 94       	dec	r0
+ 400:	e2 f7       	brpl	.-8      	; 0x3fa <DIO_ReadPin+0xaa>
+ 402:	30 e0       	ldi	r19, 0x00	; 0
+ 404:	82 23       	and	r24, r18
+ 406:	93 23       	and	r25, r19
+ 408:	02 c0       	rjmp	.+4      	; 0x40e <__LOCK_REGION_LENGTH__+0xe>
+ 40a:	95 95       	asr	r25
+ 40c:	87 95       	ror	r24
+ 40e:	4a 95       	dec	r20
+ 410:	e2 f7       	brpl	.-8      	; 0x40a <__LOCK_REGION_LENGTH__+0xa>
+ 412:	28 2f       	mov	r18, r24
+		}
+		return return_value;
+}
+ 414:	82 2f       	mov	r24, r18
+ 416:	08 95       	ret
+
+00000418 <DIO_TogglePin>:
+uint8 DIO_TogglePin(uint8 PinNum)
+{
+ 418:	cf 93       	push	r28
+ 41a:	c8 2f       	mov	r28, r24
+	if(DIO_ReadPin(PinNum) == LOW)
+ 41c:	0e 94 a8 01 	call	0x350	; 0x350 <DIO_ReadPin>
+ 420:	81 11       	cpse	r24, r1
+ 422:	05 c0       	rjmp	.+10     	; 0x42e <DIO_TogglePin+0x16>
+	{
+		DIO_WritePin(PinNum,HIGH);
+ 424:	61 e0       	ldi	r22, 0x01	; 1
+ 426:	8c 2f       	mov	r24, r28
+ 428:	0e 94 42 00 	call	0x84	; 0x84 <DIO_WritePin>
+ 42c:	04 c0       	rjmp	.+8      	; 0x436 <DIO_TogglePin+0x1e>
+	}
+	else
+	{
+		DIO_WritePin(PinNum,LOW);
+ 42e:	60 e0       	ldi	r22, 0x00	; 0
+ 430:	8c 2f       	mov	r24, r28
+ 432:	0e 94 42 00 	call	0x84	; 0x84 <DIO_WritePin>
+	}
+}
+ 436:	cf 91       	pop	r28
+ 438:	08 95       	ret
+
+0000043a <Led_One_Toggle>:
+
+#include "DIO_Definitions.h"
+
+void Led_One_Toggle(void)
+{
+	DIO_TogglePin(PIN12);
+ 43a:	8c e0       	ldi	r24, 0x0C	; 12
+ 43c:	0e 94 0c 02 	call	0x418	; 0x418 <DIO_TogglePin>
+ 440:	08 95       	ret
+
+00000442 <Led_Two_Toggle>:
+}
+
+void Led_Two_Toggle(void)
+{
+	DIO_TogglePin(PIN13);
+ 442:	8d e0       	ldi	r24, 0x0D	; 13
+ 444:	0e 94 0c 02 	call	0x418	; 0x418 <DIO_TogglePin>
+ 448:	08 95       	ret
+
+0000044a <Led_Three_Toggle>:
+}
+void Led_Three_Toggle(void)
+{
+	DIO_TogglePin(PIN14);
+ 44a:	8e e0       	ldi	r24, 0x0E	; 14
+ 44c:	0e 94 0c 02 	call	0x418	; 0x418 <DIO_TogglePin>
+ 450:	08 95       	ret
+
+00000452 <Led_Four_Toggle>:
+}
+
+void Led_Four_Toggle(void)
+{
+	DIO_TogglePin(PIN15);
+ 452:	8f e0       	ldi	r24, 0x0F	; 15
+ 454:	0e 94 0c 02 	call	0x418	; 0x418 <DIO_TogglePin>
+ 458:	08 95       	ret
+
+0000045a <main>:
+#include "Schedular.h"
 
 int main(void)
 {
-  7c:	ff cf       	rjmp	.-2      	; 0x7c <main>
+	/*Set Leds As OUTPUt*/
+	DIO_SetPinDirection(PIN12,OUTPUT);
+ 45a:	61 e0       	ldi	r22, 0x01	; 1
+ 45c:	8c e0       	ldi	r24, 0x0C	; 12
+ 45e:	0e 94 f5 00 	call	0x1ea	; 0x1ea <DIO_SetPinDirection>
+	DIO_SetPinDirection(PIN13,OUTPUT);
+ 462:	61 e0       	ldi	r22, 0x01	; 1
+ 464:	8d e0       	ldi	r24, 0x0D	; 13
+ 466:	0e 94 f5 00 	call	0x1ea	; 0x1ea <DIO_SetPinDirection>
+	DIO_SetPinDirection(PIN14,OUTPUT);
+ 46a:	61 e0       	ldi	r22, 0x01	; 1
+ 46c:	8e e0       	ldi	r24, 0x0E	; 14
+ 46e:	0e 94 f5 00 	call	0x1ea	; 0x1ea <DIO_SetPinDirection>
+	DIO_SetPinDirection(PIN15,OUTPUT);
+ 472:	61 e0       	ldi	r22, 0x01	; 1
+ 474:	8f e0       	ldi	r24, 0x0F	; 15
+ 476:	0e 94 f5 00 	call	0x1ea	; 0x1ea <DIO_SetPinDirection>
+	
+	/*Set Direction For Button */
+	DIO_SetPinDirection(PIN10,INPUT);
+ 47a:	60 e0       	ldi	r22, 0x00	; 0
+ 47c:	8a e0       	ldi	r24, 0x0A	; 10
+ 47e:	0e 94 f5 00 	call	0x1ea	; 0x1ea <DIO_SetPinDirection>
+	
+	/*Schedular Data Structure Init*/
+	scheduler_Init();
+ 482:	0e 94 82 02 	call	0x504	; 0x504 <scheduler_Init>
+	
+	/*Add Tasks*/
+	scheduler_Add_Task(Task1,1000,1,0);
+ 486:	00 e0       	ldi	r16, 0x00	; 0
+ 488:	21 e0       	ldi	r18, 0x01	; 1
+ 48a:	48 ee       	ldi	r20, 0xE8	; 232
+ 48c:	53 e0       	ldi	r21, 0x03	; 3
+ 48e:	60 e0       	ldi	r22, 0x00	; 0
+ 490:	70 e0       	ldi	r23, 0x00	; 0
+ 492:	81 ea       	ldi	r24, 0xA1	; 161
+ 494:	93 e0       	ldi	r25, 0x03	; 3
+ 496:	0e 94 93 02 	call	0x526	; 0x526 <scheduler_Add_Task>
+	scheduler_Add_Task(Task2,2000,1,1);
+ 49a:	01 e0       	ldi	r16, 0x01	; 1
+ 49c:	21 e0       	ldi	r18, 0x01	; 1
+ 49e:	40 ed       	ldi	r20, 0xD0	; 208
+ 4a0:	57 e0       	ldi	r21, 0x07	; 7
+ 4a2:	60 e0       	ldi	r22, 0x00	; 0
+ 4a4:	70 e0       	ldi	r23, 0x00	; 0
+ 4a6:	84 ea       	ldi	r24, 0xA4	; 164
+ 4a8:	93 e0       	ldi	r25, 0x03	; 3
+ 4aa:	0e 94 93 02 	call	0x526	; 0x526 <scheduler_Add_Task>
+	scheduler_Add_Task(Task3,3000,1,2);
+ 4ae:	02 e0       	ldi	r16, 0x02	; 2
+ 4b0:	21 e0       	ldi	r18, 0x01	; 1
+ 4b2:	48 eb       	ldi	r20, 0xB8	; 184
+ 4b4:	5b e0       	ldi	r21, 0x0B	; 11
+ 4b6:	60 e0       	ldi	r22, 0x00	; 0
+ 4b8:	70 e0       	ldi	r23, 0x00	; 0
+ 4ba:	87 ea       	ldi	r24, 0xA7	; 167
+ 4bc:	93 e0       	ldi	r25, 0x03	; 3
+ 4be:	0e 94 93 02 	call	0x526	; 0x526 <scheduler_Add_Task>
+	scheduler_Add_Task(Task4,4000,1,3);
+ 4c2:	03 e0       	ldi	r16, 0x03	; 3
+ 4c4:	21 e0       	ldi	r18, 0x01	; 1
+ 4c6:	40 ea       	ldi	r20, 0xA0	; 160
+ 4c8:	5f e0       	ldi	r21, 0x0F	; 15
+ 4ca:	60 e0       	ldi	r22, 0x00	; 0
+ 4cc:	70 e0       	ldi	r23, 0x00	; 0
+ 4ce:	8a ea       	ldi	r24, 0xAA	; 170
+ 4d0:	93 e0       	ldi	r25, 0x03	; 3
+ 4d2:	0e 94 93 02 	call	0x526	; 0x526 <scheduler_Add_Task>
+	scheduler_Add_Task(Task5,5000,1,4);
+ 4d6:	04 e0       	ldi	r16, 0x04	; 4
+ 4d8:	21 e0       	ldi	r18, 0x01	; 1
+ 4da:	48 e8       	ldi	r20, 0x88	; 136
+ 4dc:	53 e1       	ldi	r21, 0x13	; 19
+ 4de:	60 e0       	ldi	r22, 0x00	; 0
+ 4e0:	70 e0       	ldi	r23, 0x00	; 0
+ 4e2:	8d ea       	ldi	r24, 0xAD	; 173
+ 4e4:	93 e0       	ldi	r25, 0x03	; 3
+ 4e6:	0e 94 93 02 	call	0x526	; 0x526 <scheduler_Add_Task>
+	
+    /* Start Schedular */
+	scheduler_Start(ONE_OS_TICK);
+ 4ea:	81 e0       	ldi	r24, 0x01	; 1
+ 4ec:	90 e0       	ldi	r25, 0x00	; 0
+ 4ee:	0e 94 98 03 	call	0x730	; 0x730 <scheduler_Start>
+ 4f2:	ff cf       	rjmp	.-2      	; 0x4f2 <main+0x98>
 
-0000007e <__vector_10>:
+000004f4 <set_flag>:
+		dispatcher();
+	}
+}
+void static set_flag(void)
+{
+	if( flag == ZERO)
+ 4f4:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <flag>
+ 4f8:	81 11       	cpse	r24, r1
+ 4fa:	03 c0       	rjmp	.+6      	; 0x502 <set_flag+0xe>
+	{
+		flag = ONE;
+ 4fc:	81 e0       	ldi	r24, 0x01	; 1
+ 4fe:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <flag>
+ 502:	08 95       	ret
+
+00000504 <scheduler_Init>:
+Tasks_T Tasks_Arr[MAX_NUM_TASKS];
+
+/*Static uin8 sta*/
+
+void scheduler_Init()
+{
+ 504:	e5 e6       	ldi	r30, 0x65	; 101
+ 506:	f0 e0       	ldi	r31, 0x00	; 0
+ 508:	81 ea       	ldi	r24, 0xA1	; 161
+ 50a:	90 e0       	ldi	r25, 0x00	; 0
+	uint32 i;
+	/*Inialize array of structure With Zero*/
+	for(i=ZERO;i<NUM_TASKS;i++)
+	{
+		Tasks_Arr[i].Tasks_Ptr = NULL;
+ 50c:	11 82       	std	Z+1, r1	; 0x01
+ 50e:	10 82       	st	Z, r1
+		Tasks_Arr[i].Task_Priority =ZERO;
+ 510:	17 82       	std	Z+7, r1	; 0x07
+ 512:	10 86       	std	Z+8, r1	; 0x08
+ 514:	11 86       	std	Z+9, r1	; 0x09
+ 516:	12 86       	std	Z+10, r1	; 0x0a
+		Tasks_Arr[i].Task_Periodicity = ZERO;
+ 518:	12 82       	std	Z+2, r1	; 0x02
+		Tasks_Arr[i].Task_Priority = ZERO;
+		Tasks_Arr[i].ID = ZERO;
+ 51a:	13 86       	std	Z+11, r1	; 0x0b
+ 51c:	3c 96       	adiw	r30, 0x0c	; 12
+
+void scheduler_Init()
+{
+	uint32 i;
+	/*Inialize array of structure With Zero*/
+	for(i=ZERO;i<NUM_TASKS;i++)
+ 51e:	e8 17       	cp	r30, r24
+ 520:	f9 07       	cpc	r31, r25
+ 522:	a1 f7       	brne	.-24     	; 0x50c <scheduler_Init+0x8>
+		Tasks_Arr[i].Task_Priority =ZERO;
+		Tasks_Arr[i].Task_Periodicity = ZERO;
+		Tasks_Arr[i].Task_Priority = ZERO;
+		Tasks_Arr[i].ID = ZERO;
+	}
+}
+ 524:	08 95       	ret
+
+00000526 <scheduler_Add_Task>:
+	{
+		flag = ONE;
+	}
+}
+uint8 scheduler_Add_Task(void (*Task)(void),uint32 Periodicity,uint8 priority,uint8 ID)
+{
+ 526:	4f 92       	push	r4
+ 528:	5f 92       	push	r5
+ 52a:	6f 92       	push	r6
+ 52c:	7f 92       	push	r7
+ 52e:	8f 92       	push	r8
+ 530:	9f 92       	push	r9
+ 532:	af 92       	push	r10
+ 534:	bf 92       	push	r11
+ 536:	ff 92       	push	r15
+ 538:	0f 93       	push	r16
+ 53a:	1f 93       	push	r17
+ 53c:	cf 93       	push	r28
+ 53e:	df 93       	push	r29
+		Set Remaining Ticks With Periodicity
+		Increment Last Element of Array Of structure
+	*/
+	else
+	{
+	Tasks_Arr[Last].Tasks_Ptr = Task;
+ 540:	20 91 61 00 	lds	r18, 0x0061	; 0x800061 <Last>
+ 544:	30 e0       	ldi	r19, 0x00	; 0
+ 546:	f9 01       	movw	r30, r18
+ 548:	ee 0f       	add	r30, r30
+ 54a:	ff 1f       	adc	r31, r31
+ 54c:	e2 0f       	add	r30, r18
+ 54e:	f3 1f       	adc	r31, r19
+ 550:	ee 0f       	add	r30, r30
+ 552:	ff 1f       	adc	r31, r31
+ 554:	ee 0f       	add	r30, r30
+ 556:	ff 1f       	adc	r31, r31
+ 558:	eb 59       	subi	r30, 0x9B	; 155
+ 55a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 55c:	91 83       	std	Z+1, r25	; 0x01
+ 55e:	80 83       	st	Z, r24
+	Tasks_Arr[Last].Task_Periodicity = Periodicity;
+ 560:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <Last>
+ 564:	90 e0       	ldi	r25, 0x00	; 0
+ 566:	fc 01       	movw	r30, r24
+ 568:	ee 0f       	add	r30, r30
+ 56a:	ff 1f       	adc	r31, r31
+ 56c:	e8 0f       	add	r30, r24
+ 56e:	f9 1f       	adc	r31, r25
+ 570:	ee 0f       	add	r30, r30
+ 572:	ff 1f       	adc	r31, r31
+ 574:	ee 0f       	add	r30, r30
+ 576:	ff 1f       	adc	r31, r31
+ 578:	eb 59       	subi	r30, 0x9B	; 155
+ 57a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 57c:	42 83       	std	Z+2, r20	; 0x02
+	Tasks_Arr[Last].Remaining_Ticks = Periodicity;
+ 57e:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <Last>
+ 582:	90 e0       	ldi	r25, 0x00	; 0
+ 584:	fc 01       	movw	r30, r24
+ 586:	ee 0f       	add	r30, r30
+ 588:	ff 1f       	adc	r31, r31
+ 58a:	e8 0f       	add	r30, r24
+ 58c:	f9 1f       	adc	r31, r25
+ 58e:	ee 0f       	add	r30, r30
+ 590:	ff 1f       	adc	r31, r31
+ 592:	ee 0f       	add	r30, r30
+ 594:	ff 1f       	adc	r31, r31
+ 596:	eb 59       	subi	r30, 0x9B	; 155
+ 598:	ff 4f       	sbci	r31, 0xFF	; 255
+ 59a:	df 01       	movw	r26, r30
+ 59c:	13 96       	adiw	r26, 0x03	; 3
+ 59e:	43 83       	std	Z+3, r20	; 0x03
+ 5a0:	11 96       	adiw	r26, 0x01	; 1
+ 5a2:	5c 93       	st	X, r21
+ 5a4:	11 97       	sbiw	r26, 0x01	; 1
+ 5a6:	12 96       	adiw	r26, 0x02	; 2
+ 5a8:	6c 93       	st	X, r22
+ 5aa:	12 97       	sbiw	r26, 0x02	; 2
+ 5ac:	13 96       	adiw	r26, 0x03	; 3
+ 5ae:	7c 93       	st	X, r23
+	Tasks_Arr[Last].ID = ID;
+ 5b0:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <Last>
+ 5b4:	90 e0       	ldi	r25, 0x00	; 0
+ 5b6:	fc 01       	movw	r30, r24
+ 5b8:	ee 0f       	add	r30, r30
+ 5ba:	ff 1f       	adc	r31, r31
+ 5bc:	e8 0f       	add	r30, r24
+ 5be:	f9 1f       	adc	r31, r25
+ 5c0:	ee 0f       	add	r30, r30
+ 5c2:	ff 1f       	adc	r31, r31
+ 5c4:	ee 0f       	add	r30, r30
+ 5c6:	ff 1f       	adc	r31, r31
+ 5c8:	eb 59       	subi	r30, 0x9B	; 155
+ 5ca:	ff 4f       	sbci	r31, 0xFF	; 255
+ 5cc:	03 87       	std	Z+11, r16	; 0x0b
+	Last++;
+ 5ce:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <Last>
+ 5d2:	8f 5f       	subi	r24, 0xFF	; 255
+ 5d4:	80 93 61 00 	sts	0x0061, r24	; 0x800061 <Last>
+ 5d8:	c5 e0       	ldi	r28, 0x05	; 5
+ 5da:	25 e9       	ldi	r18, 0x95	; 149
+ 5dc:	30 e0       	ldi	r19, 0x00	; 0
+ 5de:	3b c0       	rjmp	.+118    	; 0x656 <scheduler_Add_Task+0x130>
+	for(index = ZERO; index < NUM_TASKS;index++)
+	{
+		for (indexx = ZERO; indexx < NUM_TASKS - ONE;indexx++)
+		{
+			/*if priority is Inverted*/
+			if ( Tasks_Arr[indexx].Task_Priority < Tasks_Arr[indexx + ONE].Task_Priority )
+ 5e0:	87 81       	ldd	r24, Z+7	; 0x07
+ 5e2:	90 85       	ldd	r25, Z+8	; 0x08
+ 5e4:	a1 85       	ldd	r26, Z+9	; 0x09
+ 5e6:	b2 85       	ldd	r27, Z+10	; 0x0a
+ 5e8:	43 89       	ldd	r20, Z+19	; 0x13
+ 5ea:	54 89       	ldd	r21, Z+20	; 0x14
+ 5ec:	65 89       	ldd	r22, Z+21	; 0x15
+ 5ee:	76 89       	ldd	r23, Z+22	; 0x16
+ 5f0:	84 17       	cp	r24, r20
+ 5f2:	95 07       	cpc	r25, r21
+ 5f4:	a6 07       	cpc	r26, r22
+ 5f6:	b7 07       	cpc	r27, r23
+ 5f8:	40 f5       	brcc	.+80     	; 0x64a <scheduler_Add_Task+0x124>
+{
+	/*Create Temp Structure*/
+	Tasks_T Swap_Structure;
+	/*Save Tasks_Array[indexx]*/
+	Swap_Structure.Task_Priority = Tasks_Arr[indexx].Task_Priority;
+	Swap_Structure.Task_Periodicity = Tasks_Arr[indexx].Task_Periodicity;
+ 5fa:	f2 80       	ldd	r15, Z+2	; 0x02
+	Swap_Structure.Remaining_Ticks = Tasks_Arr[indexx].Remaining_Ticks;
+ 5fc:	83 80       	ldd	r8, Z+3	; 0x03
+ 5fe:	94 80       	ldd	r9, Z+4	; 0x04
+ 600:	a5 80       	ldd	r10, Z+5	; 0x05
+ 602:	b6 80       	ldd	r11, Z+6	; 0x06
+	Swap_Structure.Tasks_Ptr = Tasks_Arr[indexx].Tasks_Ptr;
+ 604:	00 81       	ld	r16, Z
+ 606:	11 81       	ldd	r17, Z+1	; 0x01
+	Swap_Structure.ID = Tasks_Arr[indexx].ID;
+ 608:	d3 85       	ldd	r29, Z+11	; 0x0b
+	
+	/* Swap Tasks*/
+	Tasks_Arr[indexx].Remaining_Ticks = Tasks_Arr[indexx + 1].Remaining_Ticks;
+ 60a:	47 84       	ldd	r4, Z+15	; 0x0f
+ 60c:	50 88       	ldd	r5, Z+16	; 0x10
+ 60e:	61 88       	ldd	r6, Z+17	; 0x11
+ 610:	72 88       	ldd	r7, Z+18	; 0x12
+ 612:	43 82       	std	Z+3, r4	; 0x03
+ 614:	54 82       	std	Z+4, r5	; 0x04
+ 616:	65 82       	std	Z+5, r6	; 0x05
+ 618:	76 82       	std	Z+6, r7	; 0x06
+	Tasks_Arr[indexx].Task_Priority = Tasks_Arr[indexx + 1].Task_Priority;
+ 61a:	47 83       	std	Z+7, r20	; 0x07
+ 61c:	50 87       	std	Z+8, r21	; 0x08
+ 61e:	61 87       	std	Z+9, r22	; 0x09
+ 620:	72 87       	std	Z+10, r23	; 0x0a
+	Tasks_Arr[indexx].Task_Periodicity = Tasks_Arr[indexx + 1].Task_Periodicity;
+ 622:	46 85       	ldd	r20, Z+14	; 0x0e
+ 624:	42 83       	std	Z+2, r20	; 0x02
+	Tasks_Arr[indexx].Tasks_Ptr = Tasks_Arr[indexx+1].Tasks_Ptr;
+ 626:	44 85       	ldd	r20, Z+12	; 0x0c
+ 628:	55 85       	ldd	r21, Z+13	; 0x0d
+ 62a:	51 83       	std	Z+1, r21	; 0x01
+ 62c:	40 83       	st	Z, r20
+	Tasks_Arr[indexx].ID = Tasks_Arr[indexx+1].ID;
+ 62e:	47 89       	ldd	r20, Z+23	; 0x17
+ 630:	43 87       	std	Z+11, r20	; 0x0b
+	
+	/*Swap Tasks_Arr[indexx+1]*/
+	Tasks_Arr[indexx + 1].Remaining_Ticks = Swap_Structure.Remaining_Ticks;
+ 632:	87 86       	std	Z+15, r8	; 0x0f
+ 634:	90 8a       	std	Z+16, r9	; 0x10
+ 636:	a1 8a       	std	Z+17, r10	; 0x11
+ 638:	b2 8a       	std	Z+18, r11	; 0x12
+	Tasks_Arr[indexx + 1].Task_Priority = Swap_Structure.Task_Priority;
+ 63a:	83 8b       	std	Z+19, r24	; 0x13
+ 63c:	94 8b       	std	Z+20, r25	; 0x14
+ 63e:	a5 8b       	std	Z+21, r26	; 0x15
+ 640:	b6 8b       	std	Z+22, r27	; 0x16
+	Tasks_Arr[indexx + 1].Task_Periodicity = Swap_Structure.Task_Periodicity;
+ 642:	f6 86       	std	Z+14, r15	; 0x0e
+	Tasks_Arr[indexx + 1].Tasks_Ptr = Swap_Structure.Tasks_Ptr;
+ 644:	15 87       	std	Z+13, r17	; 0x0d
+ 646:	04 87       	std	Z+12, r16	; 0x0c
+	Tasks_Arr[indexx + 1].ID = Swap_Structure.ID;
+ 648:	d7 8b       	std	Z+23, r29	; 0x17
+ 64a:	3c 96       	adiw	r30, 0x0c	; 12
+	Last++;
+	/*Sort The Array From Low To High Depend on Priority*/
+	
+	for(index = ZERO; index < NUM_TASKS;index++)
+	{
+		for (indexx = ZERO; indexx < NUM_TASKS - ONE;indexx++)
+ 64c:	e2 17       	cp	r30, r18
+ 64e:	f3 07       	cpc	r31, r19
+ 650:	39 f6       	brne	.-114    	; 0x5e0 <scheduler_Add_Task+0xba>
+ 652:	c1 50       	subi	r28, 0x01	; 1
+	Tasks_Arr[Last].Remaining_Ticks = Periodicity;
+	Tasks_Arr[Last].ID = ID;
+	Last++;
+	/*Sort The Array From Low To High Depend on Priority*/
+	
+	for(index = ZERO; index < NUM_TASKS;index++)
+ 654:	19 f0       	breq	.+6      	; 0x65c <scheduler_Add_Task+0x136>
+ 656:	e5 e6       	ldi	r30, 0x65	; 101
+ 658:	f0 e0       	ldi	r31, 0x00	; 0
+ 65a:	c2 cf       	rjmp	.-124    	; 0x5e0 <scheduler_Add_Task+0xba>
+			}
+		}
+	}
+	return TRUE;
+	}
+}
+ 65c:	81 e0       	ldi	r24, 0x01	; 1
+ 65e:	df 91       	pop	r29
+ 660:	cf 91       	pop	r28
+ 662:	1f 91       	pop	r17
+ 664:	0f 91       	pop	r16
+ 666:	ff 90       	pop	r15
+ 668:	bf 90       	pop	r11
+ 66a:	af 90       	pop	r10
+ 66c:	9f 90       	pop	r9
+ 66e:	8f 90       	pop	r8
+ 670:	7f 90       	pop	r7
+ 672:	6f 90       	pop	r6
+ 674:	5f 90       	pop	r5
+ 676:	4f 90       	pop	r4
+ 678:	08 95       	ret
+
+0000067a <scheduler_Remove_Task>:
+
+void scheduler_Remove_Task(uint8 ID)
+{
+ 67a:	e5 e6       	ldi	r30, 0x65	; 101
+ 67c:	f0 e0       	ldi	r31, 0x00	; 0
+ 67e:	21 ea       	ldi	r18, 0xA1	; 161
+ 680:	30 e0       	ldi	r19, 0x00	; 0
+	for (index = 0; index < NUM_TASKS; index++)
+	{
+		if (Tasks_Arr[index].ID == ID)
+		{
+			/*if the Priority is 99 the task will not Excute*/
+			Tasks_Arr[index].Task_Priority = 99; 
+ 682:	43 e6       	ldi	r20, 0x63	; 99
+ 684:	50 e0       	ldi	r21, 0x00	; 0
+ 686:	60 e0       	ldi	r22, 0x00	; 0
+ 688:	70 e0       	ldi	r23, 0x00	; 0
+void scheduler_Remove_Task(uint8 ID)
+{
+	uint8 index;
+	for (index = 0; index < NUM_TASKS; index++)
+	{
+		if (Tasks_Arr[index].ID == ID)
+ 68a:	93 85       	ldd	r25, Z+11	; 0x0b
+ 68c:	98 13       	cpse	r25, r24
+ 68e:	04 c0       	rjmp	.+8      	; 0x698 <scheduler_Remove_Task+0x1e>
+		{
+			/*if the Priority is 99 the task will not Excute*/
+			Tasks_Arr[index].Task_Priority = 99; 
+ 690:	47 83       	std	Z+7, r20	; 0x07
+ 692:	50 87       	std	Z+8, r21	; 0x08
+ 694:	61 87       	std	Z+9, r22	; 0x09
+ 696:	72 87       	std	Z+10, r23	; 0x0a
+ 698:	3c 96       	adiw	r30, 0x0c	; 12
+}
+
+void scheduler_Remove_Task(uint8 ID)
+{
+	uint8 index;
+	for (index = 0; index < NUM_TASKS; index++)
+ 69a:	e2 17       	cp	r30, r18
+ 69c:	f3 07       	cpc	r31, r19
+ 69e:	a9 f7       	brne	.-22     	; 0x68a <scheduler_Remove_Task+0x10>
+		{
+			/*if the Priority is 99 the task will not Excute*/
+			Tasks_Arr[index].Task_Priority = 99; 
+		}
+	}
+}
+ 6a0:	08 95       	ret
+
+000006a2 <dispatcher>:
+	Tasks_Arr[indexx + 1].Tasks_Ptr = Swap_Structure.Tasks_Ptr;
+	Tasks_Arr[indexx + 1].ID = Swap_Structure.ID;
+}
+
+void dispatcher(void)
+{
+ 6a2:	ef 92       	push	r14
+ 6a4:	ff 92       	push	r15
+ 6a6:	0f 93       	push	r16
+ 6a8:	1f 93       	push	r17
+ 6aa:	cf 93       	push	r28
+ 6ac:	df 93       	push	r29
+	volatile static uint8 NewTickFlag = ZERO ;
+	uint32 j;
+	/*IF Timer Interrupt Happened Flag Will Be One*/
+	if (ONE == flag)
+ 6ae:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <flag>
+ 6b2:	81 30       	cpi	r24, 0x01	; 1
+ 6b4:	b1 f5       	brne	.+108    	; 0x722 <dispatcher+0x80>
+	{
+		/* Increment Flag */
+		NewTickFlag++;
+ 6b6:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+ 6ba:	8f 5f       	subi	r24, 0xFF	; 255
+ 6bc:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+ 6c0:	c5 e6       	ldi	r28, 0x65	; 101
+ 6c2:	d0 e0       	ldi	r29, 0x00	; 0
+ 6c4:	0f 2e       	mov	r0, r31
+ 6c6:	f1 ea       	ldi	r31, 0xA1	; 161
+ 6c8:	ef 2e       	mov	r14, r31
+ 6ca:	f0 e0       	ldi	r31, 0x00	; 0
+ 6cc:	ff 2e       	mov	r15, r31
+ 6ce:	f0 2d       	mov	r31, r0
+	/*For Loop For The Tasks and Scheduale Them*/
+	for(j=ZERO;j<NUM_TASKS;j++)
+	{
+		/*Decrement Periodicity by ONE Every Tick */
+		Tasks_Arr[j].Remaining_Ticks--;
+ 6d0:	8b 81       	ldd	r24, Y+3	; 0x03
+ 6d2:	9c 81       	ldd	r25, Y+4	; 0x04
+ 6d4:	ad 81       	ldd	r26, Y+5	; 0x05
+ 6d6:	be 81       	ldd	r27, Y+6	; 0x06
+ 6d8:	01 97       	sbiw	r24, 0x01	; 1
+ 6da:	a1 09       	sbc	r26, r1
+ 6dc:	b1 09       	sbc	r27, r1
+ 6de:	8b 83       	std	Y+3, r24	; 0x03
+ 6e0:	9c 83       	std	Y+4, r25	; 0x04
+ 6e2:	ad 83       	std	Y+5, r26	; 0x05
+ 6e4:	be 83       	std	Y+6, r27	; 0x06
+		/*IF Remaining  Ticks Equals Zero Excute Task and Set Remaining To The Periodicity*/
+		if(Tasks_Arr[j].Remaining_Ticks == ZERO && Tasks_Arr[j].Task_Priority != 99 )
+ 6e6:	89 2b       	or	r24, r25
+ 6e8:	8a 2b       	or	r24, r26
+ 6ea:	8b 2b       	or	r24, r27
+ 6ec:	a1 f4       	brne	.+40     	; 0x716 <dispatcher+0x74>
+ 6ee:	8f 81       	ldd	r24, Y+7	; 0x07
+ 6f0:	98 85       	ldd	r25, Y+8	; 0x08
+ 6f2:	a9 85       	ldd	r26, Y+9	; 0x09
+ 6f4:	ba 85       	ldd	r27, Y+10	; 0x0a
+ 6f6:	83 36       	cpi	r24, 0x63	; 99
+ 6f8:	91 05       	cpc	r25, r1
+ 6fa:	a1 05       	cpc	r26, r1
+ 6fc:	b1 05       	cpc	r27, r1
+ 6fe:	59 f0       	breq	.+22     	; 0x716 <dispatcher+0x74>
+		{
+			/*Call Function*/
+			Tasks_Arr[j].Tasks_Ptr();
+ 700:	e8 81       	ld	r30, Y
+ 702:	f9 81       	ldd	r31, Y+1	; 0x01
+ 704:	09 95       	icall
+			/*Set Remaining To The Periodicity*/
+			Tasks_Arr[j].Remaining_Ticks = Tasks_Arr[j].Task_Periodicity;
+ 706:	8a 81       	ldd	r24, Y+2	; 0x02
+ 708:	90 e0       	ldi	r25, 0x00	; 0
+ 70a:	a0 e0       	ldi	r26, 0x00	; 0
+ 70c:	b0 e0       	ldi	r27, 0x00	; 0
+ 70e:	8b 83       	std	Y+3, r24	; 0x03
+ 710:	9c 83       	std	Y+4, r25	; 0x04
+ 712:	ad 83       	std	Y+5, r26	; 0x05
+ 714:	be 83       	std	Y+6, r27	; 0x06
+ 716:	2c 96       	adiw	r28, 0x0c	; 12
+	if (ONE == flag)
+	{
+		/* Increment Flag */
+		NewTickFlag++;
+	/*For Loop For The Tasks and Scheduale Them*/
+	for(j=ZERO;j<NUM_TASKS;j++)
+ 718:	ce 15       	cp	r28, r14
+ 71a:	df 05       	cpc	r29, r15
+ 71c:	c9 f6       	brne	.-78     	; 0x6d0 <dispatcher+0x2e>
+			/*Set Remaining To The Periodicity*/
+			Tasks_Arr[j].Remaining_Ticks = Tasks_Arr[j].Task_Periodicity;
+		}
+	}
+	/*Set Flag To Zero*/
+		flag = ZERO;
+ 71e:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <flag>
+	}
+ 722:	df 91       	pop	r29
+ 724:	cf 91       	pop	r28
+ 726:	1f 91       	pop	r17
+ 728:	0f 91       	pop	r16
+ 72a:	ff 90       	pop	r15
+ 72c:	ef 90       	pop	r14
+ 72e:	08 95       	ret
+
+00000730 <scheduler_Start>:
+}
+/*Start Schedular With initalized Os Tick and Set Callback Function in Timer*/
+void scheduler_Start(uint16 OS_Tick)
+{
+	/*Inialize Timer*/
+	timer_init(OS_Tick);
+ 730:	0e 94 b5 03 	call	0x76a	; 0x76a <timer_init>
+	/*Set Call_Back_function To The Set Flag*/
+	set_Callback_Function(set_flag);
+ 734:	8a e7       	ldi	r24, 0x7A	; 122
+ 736:	92 e0       	ldi	r25, 0x02	; 2
+ 738:	0e 94 c6 03 	call	0x78c	; 0x78c <set_Callback_Function>
+	while(1)
+	{
+		dispatcher();
+ 73c:	0e 94 51 03 	call	0x6a2	; 0x6a2 <dispatcher>
+ 740:	fd cf       	rjmp	.-6      	; 0x73c <scheduler_Start+0xc>
+
+00000742 <Task1>:
+
+/*Task 1*/	
+void Task1()
+{
+	/*Toggle The Led 1*/
+	Led_One_Toggle();
+ 742:	0e 94 1d 02 	call	0x43a	; 0x43a <Led_One_Toggle>
+ 746:	08 95       	ret
+
+00000748 <Task2>:
+}
+/*Task2*/
+void Task2()
+{
+	/*Toggle The Led 2*/
+	Led_Two_Toggle();
+ 748:	0e 94 21 02 	call	0x442	; 0x442 <Led_Two_Toggle>
+ 74c:	08 95       	ret
+
+0000074e <Task3>:
+}
+/*Task3*/
+void Task3()
+{
+	/*Toggle The Led 3*/
+	Led_Three_Toggle();
+ 74e:	0e 94 25 02 	call	0x44a	; 0x44a <Led_Three_Toggle>
+ 752:	08 95       	ret
+
+00000754 <Task4>:
+}
+/*Task 4*/
+void Task4()
+{
+	/*Toggle The Led 4*/
+	Led_Four_Toggle();
+ 754:	0e 94 29 02 	call	0x452	; 0x452 <Led_Four_Toggle>
+ 758:	08 95       	ret
+
+0000075a <Task5>:
+}
+
+void Task5()
+{
+	if(get_Button1_Status() == TRUE)
+ 75a:	0e 94 3e 00 	call	0x7c	; 0x7c <get_Button1_Status>
+ 75e:	81 30       	cpi	r24, 0x01	; 1
+ 760:	19 f4       	brne	.+6      	; 0x768 <Task5+0xe>
+	{
+		scheduler_Remove_Task(Task4_ID);
+ 762:	83 e0       	ldi	r24, 0x03	; 3
+ 764:	0e 94 3d 03 	call	0x67a	; 0x67a <scheduler_Remove_Task>
+ 768:	08 95       	ret
+
+0000076a <timer_init>:
+
+/*Global Setting To Set Timer For 1 MSec on 16 MHZ Crystal*/
+void timer_init(uint16 OS_Tick)
+{
+	/**/
+	OS_Tick_in_Timer = OS_Tick;
+ 76a:	90 93 d4 00 	sts	0x00D4, r25	; 0x8000d4 <OS_Tick_in_Timer+0x1>
+ 76e:	80 93 d3 00 	sts	0x00D3, r24	; 0x8000d3 <OS_Tick_in_Timer>
+	/*Enable Global Interrupt*/
+	SREG |= (1<<IBIT);
+ 772:	8f b7       	in	r24, 0x3f	; 63
+ 774:	80 68       	ori	r24, 0x80	; 128
+ 776:	8f bf       	out	0x3f, r24	; 63
+	/*Enable Timer 0*/
+	TIMSK |=(1<<OCIE0);
+ 778:	89 b7       	in	r24, 0x39	; 57
+ 77a:	82 60       	ori	r24, 0x02	; 2
+ 77c:	89 bf       	out	0x39, r24	; 57
+	/*Define Values To Timer To be 1 mSec*/
+	TCNT0 = 0 ;
+ 77e:	12 be       	out	0x32, r1	; 50
+	OCR0 = 249 ;
+ 780:	89 ef       	ldi	r24, 0xF9	; 249
+ 782:	8c bf       	out	0x3c, r24	; 60
+	/*Prescaler 64*/
+	TCCR0 |= (1<<CS00)|(1<<CS01)|(1<<WGM01);
+ 784:	83 b7       	in	r24, 0x33	; 51
+ 786:	8b 60       	ori	r24, 0x0B	; 11
+ 788:	83 bf       	out	0x33, r24	; 51
+ 78a:	08 95       	ret
+
+0000078c <set_Callback_Function>:
+}
+
 void set_Callback_Function(void (*ptr)(void))
 {
 	Pointer_To_Func = ptr;
+ 78c:	90 93 d2 00 	sts	0x00D2, r25	; 0x8000d2 <Pointer_To_Func+0x1>
+ 790:	80 93 d1 00 	sts	0x00D1, r24	; 0x8000d1 <Pointer_To_Func>
+ 794:	08 95       	ret
+
+00000796 <__vector_10>:
 }
 ISR(TIMER0_COMP_vect)
 {
-  7e:	1f 92       	push	r1
-  80:	0f 92       	push	r0
-  82:	0f b6       	in	r0, 0x3f	; 63
-  84:	0f 92       	push	r0
-  86:	11 24       	eor	r1, r1
-  88:	2f 93       	push	r18
-  8a:	3f 93       	push	r19
-  8c:	4f 93       	push	r20
-  8e:	5f 93       	push	r21
-  90:	6f 93       	push	r22
-  92:	7f 93       	push	r23
-  94:	8f 93       	push	r24
-  96:	9f 93       	push	r25
-  98:	af 93       	push	r26
-  9a:	bf 93       	push	r27
-  9c:	ef 93       	push	r30
-  9e:	ff 93       	push	r31
+ 796:	1f 92       	push	r1
+ 798:	0f 92       	push	r0
+ 79a:	0f b6       	in	r0, 0x3f	; 63
+ 79c:	0f 92       	push	r0
+ 79e:	11 24       	eor	r1, r1
+ 7a0:	2f 93       	push	r18
+ 7a2:	3f 93       	push	r19
+ 7a4:	4f 93       	push	r20
+ 7a6:	5f 93       	push	r21
+ 7a8:	6f 93       	push	r22
+ 7aa:	7f 93       	push	r23
+ 7ac:	8f 93       	push	r24
+ 7ae:	9f 93       	push	r25
+ 7b0:	af 93       	push	r26
+ 7b2:	bf 93       	push	r27
+ 7b4:	ef 93       	push	r30
+ 7b6:	ff 93       	push	r31
 	Tick++;
-  a0:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
-  a4:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
-  a8:	01 96       	adiw	r24, 0x01	; 1
-  aa:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
-  ae:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+ 7b8:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <Tick>
+ 7bc:	90 91 64 00 	lds	r25, 0x0064	; 0x800064 <Tick+0x1>
+ 7c0:	01 96       	adiw	r24, 0x01	; 1
+ 7c2:	90 93 64 00 	sts	0x0064, r25	; 0x800064 <Tick+0x1>
+ 7c6:	80 93 63 00 	sts	0x0063, r24	; 0x800063 <Tick>
 	if (OS_Tick_in_Timer == Tick)
-  b2:	20 91 64 00 	lds	r18, 0x0064	; 0x800064 <OS_Tick_in_Timer>
-  b6:	30 91 65 00 	lds	r19, 0x0065	; 0x800065 <OS_Tick_in_Timer+0x1>
-  ba:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
-  be:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
-  c2:	28 17       	cp	r18, r24
-  c4:	39 07       	cpc	r19, r25
-  c6:	49 f4       	brne	.+18     	; 0xda <__vector_10+0x5c>
+ 7ca:	20 91 d3 00 	lds	r18, 0x00D3	; 0x8000d3 <OS_Tick_in_Timer>
+ 7ce:	30 91 d4 00 	lds	r19, 0x00D4	; 0x8000d4 <OS_Tick_in_Timer+0x1>
+ 7d2:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <Tick>
+ 7d6:	90 91 64 00 	lds	r25, 0x0064	; 0x800064 <Tick+0x1>
+ 7da:	28 17       	cp	r18, r24
+ 7dc:	39 07       	cpc	r19, r25
+ 7de:	49 f4       	brne	.+18     	; 0x7f2 <__vector_10+0x5c>
 	{
 		/*Call Back Function*/
 		Pointer_To_Func();
-  c8:	e0 91 62 00 	lds	r30, 0x0062	; 0x800062 <Pointer_To_Func>
-  cc:	f0 91 63 00 	lds	r31, 0x0063	; 0x800063 <Pointer_To_Func+0x1>
-  d0:	09 95       	icall
+ 7e0:	e0 91 d1 00 	lds	r30, 0x00D1	; 0x8000d1 <Pointer_To_Func>
+ 7e4:	f0 91 d2 00 	lds	r31, 0x00D2	; 0x8000d2 <Pointer_To_Func+0x1>
+ 7e8:	09 95       	icall
 		/*Set Tick To Zero*/
 		Tick = ZERO;
-  d2:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <_edata+0x1>
-  d6:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
+ 7ea:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <Tick+0x1>
+ 7ee:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <Tick>
 	}
-  da:	ff 91       	pop	r31
-  dc:	ef 91       	pop	r30
-  de:	bf 91       	pop	r27
-  e0:	af 91       	pop	r26
-  e2:	9f 91       	pop	r25
-  e4:	8f 91       	pop	r24
-  e6:	7f 91       	pop	r23
-  e8:	6f 91       	pop	r22
-  ea:	5f 91       	pop	r21
-  ec:	4f 91       	pop	r20
-  ee:	3f 91       	pop	r19
-  f0:	2f 91       	pop	r18
-  f2:	0f 90       	pop	r0
-  f4:	0f be       	out	0x3f, r0	; 63
-  f6:	0f 90       	pop	r0
-  f8:	1f 90       	pop	r1
-  fa:	18 95       	reti
+ 7f2:	ff 91       	pop	r31
+ 7f4:	ef 91       	pop	r30
+ 7f6:	bf 91       	pop	r27
+ 7f8:	af 91       	pop	r26
+ 7fa:	9f 91       	pop	r25
+ 7fc:	8f 91       	pop	r24
+ 7fe:	7f 91       	pop	r23
+ 800:	6f 91       	pop	r22
+ 802:	5f 91       	pop	r21
+ 804:	4f 91       	pop	r20
+ 806:	3f 91       	pop	r19
+ 808:	2f 91       	pop	r18
+ 80a:	0f 90       	pop	r0
+ 80c:	0f be       	out	0x3f, r0	; 63
+ 80e:	0f 90       	pop	r0
+ 810:	1f 90       	pop	r1
+ 812:	18 95       	reti
 
-000000fc <_exit>:
-  fc:	f8 94       	cli
+00000814 <_exit>:
+ 814:	f8 94       	cli
 
-000000fe <__stop_program>:
-  fe:	ff cf       	rjmp	.-2      	; 0xfe <__stop_program>
+00000816 <__stop_program>:
+ 816:	ff cf       	rjmp	.-2      	; 0x816 <__stop_program>

@@ -6,6 +6,10 @@ Buttons\Buttons.c
 
 DIO\DIO.c
 
+Keypad\Keypad.c
+
+LCD\LCD.c
+
 LEDS\LEDS.c
 
 main.c

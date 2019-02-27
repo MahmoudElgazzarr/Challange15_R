@@ -106,6 +106,8 @@
       <Value>../Task</Value>
       <Value>../Timer</Value>
       <Value>../UART</Value>
+      <Value>../Keypad</Value>
+      <Value>../LCD</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
@@ -146,6 +148,18 @@
     <Compile Include="Headers\DIO_Definitions.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Headers\Keypad.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Headers\Keypad_cfg.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Headers\LCD.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Headers\LCD_Cfg.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Headers\LEDS.h">
       <SubType>compile</SubType>
     </Compile>
@@ -162,6 +176,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Headers\UART.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Keypad\Keypad.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LCD\LCD.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LEDS\LEDS.c">
@@ -188,6 +208,8 @@
     <Folder Include="Headers" />
     <Folder Include="LEDS" />
     <Folder Include="Buttons" />
+    <Folder Include="LCD" />
+    <Folder Include="Keypad" />
     <Folder Include="Timer" />
     <Folder Include="Task" />
     <Folder Include="Scheduler" />
