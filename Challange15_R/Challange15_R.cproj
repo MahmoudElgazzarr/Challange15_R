@@ -142,6 +142,9 @@
     <Compile Include="Headers\Buttons.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Headers\Config_UART.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Headers\DIO.h">
       <SubType>compile</SubType>
     </Compile>
