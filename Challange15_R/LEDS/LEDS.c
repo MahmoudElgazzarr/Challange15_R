@@ -7,6 +7,22 @@
 
 #include "DIO_Definitions.h"
 
+void led_One_Init()
+{
+	DIO_SetPinDirection(PIN12,OUTPUT);
+}
+void led_Two_Init()
+{
+	DIO_SetPinDirection(PIN13,OUTPUT);
+}
+void led_Three_Init()
+{
+	DIO_SetPinDirection(PIN14,OUTPUT);
+}
+void led_Four_Init()
+{
+	DIO_SetPinDirection(PIN15,OUTPUT);
+}
 void Led_One_Toggle(void)
 {
 	DIO_TogglePin(PIN12);

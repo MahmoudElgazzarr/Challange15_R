@@ -39,10 +39,10 @@ void UART_Init (void)
 	switch(UART_Config_S.ClockPolarity)
 	{
 		case UART_RisingPol  : Clear_Bit(UCSRC_REG_TEMP,UCPOL); /* Rising Edge */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		case UART_FallingPol : Set_Bit(UCSRC_REG_TEMP,UCPOL); /* Falling Edge */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		default:break;
 	}
@@ -52,19 +52,19 @@ void UART_Init (void)
 	{
 		case UART_5_Bits :  Clear_Bit(UCSRC_REG_TEMP,UCSZ0); /* Clear UCSZ0 BIT and Clear UCSZ1  */
 		Clear_Bit(UCSRC_REG_TEMP,UCSZ1); /* Data Size 5 Bits */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		case UART_6_Bits :  Set_Bit(UCSRC_REG_TEMP,UCSZ0);   /* Set UCSZ0 BIT and Clear UCSZ1  */
 		Clear_Bit(UCSRC_REG_TEMP,UCSZ1); /* Data Size 6 Bits */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		case UART_7_Bits :  Clear_Bit(UCSRC_REG_TEMP,UCSZ0); /* Clear UCSZ0 BIT and Set UCSZ1  */
 		Set_Bit(UCSRC_REG_TEMP,UCSZ1);   /* Data Size 7 Bits */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		case UART_8_Bits :  Set_Bit(UCSRC_REG_TEMP,UCSZ0);  /* Set UCSZ0 BIT and Set UCSZ1  */
 		Set_Bit(UCSRC_REG_TEMP,UCSZ1);  /* Data Size 8 Bits */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		default:break;
 		
@@ -75,10 +75,10 @@ void UART_Init (void)
 	switch(UART_Config_S.No_StopBits)
 	{
 		case UART_OneStopBit : Clear_Bit(UCSRC_REG_TEMP,USBS); /* Clear USBS Bit for one stop bit */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		case UART_TwoStopBit : Set_Bit(UCSRC_REG_TEMP,USBS);   /* Set USBS Bit for two stop bit */
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		default:break;
 	}
@@ -88,15 +88,15 @@ void UART_Init (void)
 	{
 		case UART_DisableParityBit : Clear_Bit(UCSRC_REG_TEMP,UPM0); /* Clear UPM0_BIT and Clear UPM1 BIT for Disable Parity Bit */
 		Clear_Bit(UCSRC_REG_TEMP,UPM1);
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		case UART_EvenParityBit    : Clear_Bit(UCSRC_REG_TEMP,UPM0); /* Clear UPM0_BIT and Set UPM1 BIT for Disable Parity Bit */
 		Set_Bit(UCSRC_REG_TEMP,UPM1);
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		case UART_OddParityBit     : Set_Bit(UCSRC_REG_TEMP,UPM0);   /* Set UPM0_BIT and Set UPM1 BIT for Disable Parity Bit */
 		Set_Bit(UCSRC_REG_TEMP,UPM1);
-		UCSRC_REG = UCSRC_REG_TEMP;
+		UCSRC_REG |= UCSRC_REG_TEMP;
 		break;
 		default:break;
 	}

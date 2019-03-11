@@ -13,6 +13,9 @@
 
 #include "Types.h"
 
+#define INPUT 0
+#define OUTPUT 1
+
 /*PORTS Macros*/
 #define PORTA_R 1
 #define PORTB_R 2

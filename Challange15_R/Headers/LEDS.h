@@ -15,6 +15,10 @@ void Led_Two_Toggle(void);
 void Led_Three_Toggle(void);
 void Led_Four_Toggle(void);
 
+void led_One_Init(void);
+void led_Two_Init(void);
+void led_Three_Init(void);
+void led_Four_Init(void);
 
 
 #endif /* LEDS_H_ */

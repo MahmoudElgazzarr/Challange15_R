@@ -7,7 +7,9 @@ main.d main.o: .././main.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  ../Headers/UART.h ../Headers/Types.h ../Headers/UART_CFG.h \
- ../Headers/DIO_Definitions.h ../Headers/DIO.h
+ ../Headers/DIO_Definitions.h ../Headers/DIO.h ../Headers/Keypad.h \
+ ../Headers/DIO_Definitions.h ../Headers/DIO.h ../Headers/Keypad_cfg.h \
+ ../Headers/LEDS.h
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\delay.h:
 
@@ -32,3 +34,13 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 ../Headers/DIO_Definitions.h:
 
 ../Headers/DIO.h:
+
+../Headers/Keypad.h:
+
+../Headers/DIO_Definitions.h:
+
+../Headers/DIO.h:
+
+../Headers/Keypad_cfg.h:
+
+../Headers/LEDS.h:

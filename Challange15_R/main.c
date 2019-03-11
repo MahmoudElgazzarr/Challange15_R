@@ -10,6 +10,10 @@
 #include "UART_CFG.h"
 #include "DIO_Definitions.h"
 #include "DIO.h"
+#include "Keypad.h"
+#include "Keypad_cfg.h"
+#include "LEDS.h"
+
 int main(void)
 {
 	/*Set pins direction as input and output*/
@@ -24,12 +28,30 @@ int main(void)
 		UART_Config_S.SpeedMode     = UART_NormalSpeedMode;   /* Set Speed Mode ( Normal or Double ) */
 		UART_Config_S.ClockPolarity = UART_RisingPol;   /* Set UART Clock Polarity ( Rising Edge or Falling Edge ) */
 		
-    /* Replace with your application code */
+    /* init UART */
 	UART_Init ();
+	
+	/*intinalize keypad*/
+	Keypad_init();
+	/*Led init*/
+	led_One_Init();
+	led_Two_Init();
+	
     while (1)
     {
-		USART_Transmit('A');
-		_delay_ms(500);
+		/*if key one pressed send A*/
+		if(Keypad_getPressedKey() == 1 )
+		{
+			USART_Transmit('A');
+			Led_One_Toggle();
+		}
+		/*if key two pressed send B*/
+		if(Keypad_getPressedKey() == 2 )
+		{
+			USART_Transmit('B');
+			Led_Two_Toggle();
+		}
+		_delay_ms(200);
     }
 }
 
